@@ -21,7 +21,6 @@ import { Medico } from "@/types";
 
 const medicoSchema = z.object({
   nome: z.string().min(3, "Nome deve ter no mínimo 3 caracteres"),
-  crm: z.string().min(5, "CRM inválido"),
   especialidade: z.string().min(3, "Especialidade obrigatória"),
   telefone: z.string().min(10, "Telefone inválido"),
   email: z.string().email("Email inválido"),
@@ -39,7 +38,6 @@ export const MedicoForm = ({ open, onOpenChange, medico, onSubmit }: MedicoFormP
     resolver: zodResolver(medicoSchema),
     defaultValues: medico || {
       nome: "",
-      crm: "",
       especialidade: "",
       telefone: "",
       email: "",
@@ -72,34 +70,19 @@ export const MedicoForm = ({ open, onOpenChange, medico, onSubmit }: MedicoFormP
                 </FormItem>
               )}
             />
-            <div className="grid grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="crm"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>CRM</FormLabel>
-                    <FormControl>
-                      <Input placeholder="12345-GO" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="especialidade"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Especialidade</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Cardiologia" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+            <FormField
+              control={form.control}
+              name="especialidade"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Especialidade</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Cardiologia" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="telefone"

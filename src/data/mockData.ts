@@ -4,7 +4,6 @@ export const medicosMock: Medico[] = [
   {
     id: "1",
     nome: "Dr. Carlos Silva",
-    crm: "12345-GO",
     especialidade: "Cardiologia",
     telefone: "(62) 98765-4321",
     email: "carlos.silva@email.com"
@@ -12,7 +11,6 @@ export const medicosMock: Medico[] = [
   {
     id: "2",
     nome: "Dra. Maria Santos",
-    crm: "23456-GO",
     especialidade: "Pediatria",
     telefone: "(62) 98765-4322",
     email: "maria.santos@email.com"
@@ -20,7 +18,6 @@ export const medicosMock: Medico[] = [
   {
     id: "3",
     nome: "Dr. João Oliveira",
-    crm: "34567-GO",
     especialidade: "Ortopedia",
     telefone: "(62) 98765-4323",
     email: "joao.oliveira@email.com"
