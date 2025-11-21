@@ -62,7 +62,6 @@ const Medicos = () => {
                 <p className="text-sm text-primary font-medium">{medico.especialidade}</p>
               </CardHeader>
               <CardContent className="space-y-2">
-                <p className="text-sm text-muted-foreground">CRM: {medico.crm}</p>
                 <p className="text-sm text-muted-foreground">Tel: {medico.telefone}</p>
                 <p className="text-sm text-muted-foreground">Email: {medico.email}</p>
                 <div className="flex gap-2 pt-4">
