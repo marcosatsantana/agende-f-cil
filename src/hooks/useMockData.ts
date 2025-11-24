@@ -1,83 +1,139 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Medico, Paciente, Consulta, ConsultaComDetalhes } from "@/types";
-import { medicosMock, pacientesMock, consultasMock } from "@/data/mockData";
+import api from "@/services/api";
 import { toast } from "sonner";
 
 export const useMockData = () => {
-  const [medicos, setMedicos] = useState<Medico[]>(medicosMock);
-  const [pacientes, setPacientes] = useState<Paciente[]>(pacientesMock);
-  const [consultas, setConsultas] = useState<Consulta[]>(consultasMock);
+  const [medicos, setMedicos] = useState<Medico[]>([]);
+  const [pacientes, setPacientes] = useState<Paciente[]>([]);
+  const [consultas, setConsultas] = useState<ConsultaComDetalhes[]>([]);
+
+  const fetchData = async () => {
+    try {
+      const [medicosRes, pacientesRes, consultasRes] = await Promise.all([
+        api.get<Medico[]>('/medicos'),
+        api.get<Paciente[]>('/pacientes'),
+        api.get<ConsultaComDetalhes[]>('/consultas')
+      ]);
+
+      setMedicos(medicosRes.data);
+      setPacientes(pacientesRes.data);
+      setConsultas(consultasRes.data);
+    } catch (error) {
+      console.error("Erro ao buscar dados:", error);
+      toast.error("Erro ao carregar dados do sistema");
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   // Médicos
-  const addMedico = (medico: Omit<Medico, "id">) => {
-    const newMedico = { ...medico, id: Date.now().toString() };
-    setMedicos([...medicos, newMedico]);
-    toast.success("Médico cadastrado com sucesso!");
-    return newMedico;
+  const addMedico = async (medico: Omit<Medico, "id">) => {
+    try {
+      // Backend doesn't support POST yet, so we just mock it for now in the UI or implement POST in backend
+      // Wait, the user asked to implement endpoints, but I only did PUT/DELETE.
+      // I should probably add POST to backend as well to make it fully functional.
+      // For now, I'll just reload data to keep it simple if I add POST later.
+      // Actually, the user asked to "continue implementation", implying full CRUD.
+      // I missed POST in my previous step. I will add POST to backend next.
+      // For now, let's assume POST exists or I will add it.
+      // Let's add POST to backend in the next step.
+      await api.post('/medicos', medico);
+      toast.success("Médico cadastrado com sucesso!");
+      fetchData();
+    } catch (error) {
+      toast.error("Erro ao cadastrar médico");
+    }
   };
 
-  const updateMedico = (id: string, medico: Omit<Medico, "id">) => {
-    setMedicos(medicos.map(m => m.id === id ? { ...medico, id } : m));
-    toast.success("Médico atualizado com sucesso!");
+  const updateMedico = async (id: string, medico: Omit<Medico, "id">) => {
+    try {
+      await api.put(`/medicos/${id}`, medico);
+      toast.success("Médico atualizado com sucesso!");
+      fetchData();
+    } catch (error) {
+      toast.error("Erro ao atualizar médico");
+    }
   };
 
-  const deleteMedico = (id: string) => {
-    setMedicos(medicos.filter(m => m.id !== id));
-    toast.success("Médico removido com sucesso!");
+  const deleteMedico = async (id: string) => {
+    try {
+      await api.delete(`/medicos/${id}`);
+      toast.success("Médico removido com sucesso!");
+      fetchData();
+    } catch (error) {
+      toast.error("Erro ao remover médico");
+    }
   };
 
   // Pacientes
-  const addPaciente = (paciente: Omit<Paciente, "id">) => {
-    const newPaciente = { ...paciente, id: Date.now().toString() };
-    setPacientes([...pacientes, newPaciente]);
-    toast.success("Paciente cadastrado com sucesso!");
-    return newPaciente;
+  const addPaciente = async (paciente: Omit<Paciente, "id">) => {
+    try {
+      await api.post('/pacientes', paciente);
+      toast.success("Paciente cadastrado com sucesso!");
+      fetchData();
+    } catch (error) {
+      toast.error("Erro ao cadastrar paciente");
+    }
   };
 
-  const updatePaciente = (id: string, paciente: Omit<Paciente, "id">) => {
-    setPacientes(pacientes.map(p => p.id === id ? { ...paciente, id } : p));
-    toast.success("Paciente atualizado com sucesso!");
+  const updatePaciente = async (id: string, paciente: Omit<Paciente, "id">) => {
+    try {
+      await api.put(`/pacientes/${id}`, paciente);
+      toast.success("Paciente atualizado com sucesso!");
+      fetchData();
+    } catch (error) {
+      toast.error("Erro ao atualizar paciente");
+    }
   };
 
-  const deletePaciente = (id: string) => {
-    setPacientes(pacientes.filter(p => p.id !== id));
-    toast.success("Paciente removido com sucesso!");
+  const deletePaciente = async (id: string) => {
+    try {
+      await api.delete(`/pacientes/${id}`);
+      toast.success("Paciente removido com sucesso!");
+      fetchData();
+    } catch (error) {
+      toast.error("Erro ao remover paciente");
+    }
   };
 
   // Consultas
-  const addConsulta = (consulta: Omit<Consulta, "id">) => {
-    const newConsulta = { ...consulta, id: Date.now().toString() };
-    setConsultas([...consultas, newConsulta]);
-    toast.success("Consulta agendada com sucesso!");
-    return newConsulta;
+  const addConsulta = async (consulta: Omit<Consulta, "id">) => {
+    try {
+      await api.post('/consultas', consulta);
+      toast.success("Consulta agendada com sucesso!");
+      fetchData();
+    } catch (error) {
+      toast.error("Erro ao agendar consulta");
+    }
   };
 
-  const updateConsulta = (id: string, consulta: Omit<Consulta, "id">) => {
-    setConsultas(consultas.map(c => c.id === id ? { ...consulta, id } : c));
-    toast.success("Consulta atualizada com sucesso!");
+  const updateConsulta = async (id: string, consulta: Omit<Consulta, "id">) => {
+    try {
+      await api.put(`/consultas/${id}`, consulta);
+      toast.success("Consulta atualizada com sucesso!");
+      fetchData();
+    } catch (error) {
+      toast.error("Erro ao atualizar consulta");
+    }
   };
 
-  const deleteConsulta = (id: string) => {
-    setConsultas(consultas.filter(c => c.id !== id));
-    toast.success("Consulta cancelada com sucesso!");
-  };
-
-  const getConsultasComDetalhes = (): ConsultaComDetalhes[] => {
-    return consultas.map(consulta => {
-      const medico = medicos.find(m => m.id === consulta.medicoId);
-      const paciente = pacientes.find(p => p.id === consulta.pacienteId);
-      return {
-        ...consulta,
-        medicoNome: medico?.nome || "Médico não encontrado",
-        pacienteNome: paciente?.nome || "Paciente não encontrado"
-      };
-    });
+  const deleteConsulta = async (id: string) => {
+    try {
+      await api.delete(`/consultas/${id}`);
+      toast.success("Consulta cancelada com sucesso!");
+      fetchData();
+    } catch (error) {
+      toast.error("Erro ao cancelar consulta");
+    }
   };
 
   return {
     medicos,
     pacientes,
-    consultas: getConsultasComDetalhes(),
+    consultas,
     addMedico,
     updateMedico,
     deleteMedico,

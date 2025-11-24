@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -43,6 +44,24 @@ export const MedicoForm = ({ open, onOpenChange, medico, onSubmit }: MedicoFormP
       email: "",
     },
   });
+
+  useEffect(() => {
+    if (medico) {
+      form.reset({
+        nome: medico.nome,
+        especialidade: medico.especialidade,
+        telefone: medico.telefone,
+        email: medico.email,
+      });
+    } else {
+      form.reset({
+        nome: "",
+        especialidade: "",
+        telefone: "",
+        email: "",
+      });
+    }
+  }, [medico, form]);
 
   const handleSubmit = (data: z.infer<typeof medicoSchema>) => {
     onSubmit(data as Omit<Medico, "id">);

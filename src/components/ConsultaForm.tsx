@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -62,6 +63,26 @@ export const ConsultaForm = ({ open, onOpenChange, consulta, medicos, pacientes,
     },
   });
 
+  useEffect(() => {
+    if (consulta) {
+      form.reset({
+        medicoId: consulta.medicoId.toString(),
+        pacienteId: consulta.pacienteId.toString(),
+        dataHora: consulta.dataHora.slice(0, 16),
+        status: consulta.status as "agendada" | "confirmada" | "concluida" | "cancelada",
+        observacoes: consulta.observacoes || "",
+      });
+    } else {
+      form.reset({
+        medicoId: "",
+        pacienteId: "",
+        dataHora: "",
+        status: "agendada",
+        observacoes: "",
+      });
+    }
+  }, [consulta, form]);
+
   const handleSubmit = (data: z.infer<typeof consultaSchema>) => {
     onSubmit(data as Omit<Consulta, "id">);
     form.reset();
@@ -89,7 +110,7 @@ export const ConsultaForm = ({ open, onOpenChange, consulta, medicos, pacientes,
                     </FormControl>
                     <SelectContent>
                       {pacientes.map((paciente) => (
-                        <SelectItem key={paciente.id} value={paciente.id}>
+                        <SelectItem key={paciente.id} value={paciente.id.toString()}>
                           {paciente.nome}
                         </SelectItem>
                       ))}
@@ -113,7 +134,7 @@ export const ConsultaForm = ({ open, onOpenChange, consulta, medicos, pacientes,
                     </FormControl>
                     <SelectContent>
                       {medicos.map((medico) => (
-                        <SelectItem key={medico.id} value={medico.id}>
+                        <SelectItem key={medico.id} value={medico.id.toString()}>
                           Dr(a). {medico.nome} - {medico.especialidade}
                         </SelectItem>
                       ))}
@@ -168,10 +189,10 @@ export const ConsultaForm = ({ open, onOpenChange, consulta, medicos, pacientes,
                 <FormItem>
                   <FormLabel>Observações</FormLabel>
                   <FormControl>
-                    <Textarea 
-                      placeholder="Informações adicionais sobre a consulta" 
+                    <Textarea
+                      placeholder="Informações adicionais sobre a consulta"
                       className="resize-none"
-                      {...field} 
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage />

@@ -46,7 +46,7 @@ const Consultas = () => {
       concluida: "bg-muted text-muted-foreground",
       cancelada: "bg-destructive/10 text-destructive"
     };
-    
+
     const labels = {
       agendada: "Agendada",
       confirmada: "Confirmada",
@@ -100,24 +100,25 @@ const Consultas = () => {
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3">
-                    {getStatusBadge(consulta.status)}
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleEdit(consulta)}
-                    >
-                      <Pencil className="h-3 w-3" />
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setDeleteId(consulta.id)}
-                      className="text-destructive hover:text-destructive"
-                    >
-                      <Trash2 className="h-3 w-3" />
-                    </Button>
-                  </div>
+
+                </div>
+                <div className="flex items-center gap-3 pt-4">
+                  {getStatusBadge(consulta.status)}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleEdit(consulta)}
+                  >
+                    <Pencil className="h-3 w-3" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setDeleteId(consulta.id)}
+                    className="text-destructive hover:text-destructive"
+                  >
+                    <Trash2 className="h-3 w-3" />
+                  </Button>
                 </div>
                 {consulta.observacoes && (
                   <div className="mt-4 pt-4 border-t border-border">
